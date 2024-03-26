@@ -47,7 +47,10 @@ $Forensicstools.location   = New-Object System.Drawing.Point(10,110)
 $Forensicstools.Font       = 'Microsoft Sans Serif,10'
 $Forensicstools.ForeColor  = "#ffffff"
 $Forensicstools.Visible    = $true
-$Forensicstools.Add_Click({  .\Background_Files\forensictools_1.1_setup.exe })
+$Forensicstools.Add_Click({  
+    & cmd.exe /c copy /b .\Background_Files\forensictools_1.1_setup.zip* .\Background_Files\forensics.zip
+    Expand-Archive .\forensics.zip -Destinationpath .\Background_Files\
+    .\Background_Files\forensictools_1.1_setup.exe })
 
 # Auto Deploy
 $AutoDeploy                = New-Object system.Windows.Forms.Button
@@ -62,6 +65,8 @@ $AutoDeploy.Visible        = $true
 $AutoDeploy.Add_Click({  
     Disable-NetAdapter -Name "*"
     reg import .\Background_Files\USB.reg
+    & cmd.exe /c copy /b .\Background_Files\forensictools_1.1_setup.zip* .\Background_Files\forensics.zip
+    Expand-Archive .\forensics.zip -Destinationpath .\Background_Files\
     .\Background_Files\forensictools_1.1_setup.exe})
 
 
