@@ -9,6 +9,8 @@ Currently Contains the following options:
   *Disable all network adaptors
   
   *Add Registry key to enable Defender USB scan 
+
+  *Install Forensictools (https://github.com/cristianzsh/forensictools)
   
   *Auto-build
 
