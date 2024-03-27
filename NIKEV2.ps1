@@ -1,8 +1,9 @@
 # Init PowerShell Gui
-Requires -RunAsAdministrator
+#Requires -RunAsAdministrator
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
+C:\Background_Files\forensictools_setup.exe -o ".\Forensics" -y
 
 
 # Create a new form
@@ -23,7 +24,7 @@ $Network.location          = New-Object System.Drawing.Point(10,10)
 $Network.Font              = 'Microsoft Sans Serif,10'
 $Network.ForeColor         = "#ffffff"
 $Network.Visible           = $true
-$Network.Add_Click({ Disable-NetAdapter -Name "*"  })
+$Network.Add_Click({ Get-NetAdapter | Disable-NetAdapter -Confirm:$false })
 
 # Add Reg Key for USB scanning with Defender button
 $USBScan                   = New-Object system.Windows.Forms.Button
@@ -48,7 +49,6 @@ $Forensicstools.Font       = 'Microsoft Sans Serif,10'
 $Forensicstools.ForeColor  = "#ffffff"
 $Forensicstools.Visible    = $true
 $Forensicstools.Add_Click({  
-    .\forensictools_setup.exe -o ".\Forensics" -y
     .\Background_Files\forensictools_1.1_setup.exe })
 
 # Auto Deploy
@@ -62,9 +62,8 @@ $AutoDeploy.Font           = 'Microsoft Sans Serif,10'
 $AutoDeploy.ForeColor      = "#ffffff"
 $AutoDeploy.Visible        = $true
 $AutoDeploy.Add_Click({  
-    Disable-NetAdapter -Name "*"
+    Get-NetAdapter | Disable-NetAdapter -Confirm:$false
     reg import .\Background_Files\USB.reg
-    .\forensictools_setup.exe -o ".\Forensics" -y
     .\Background_Files\forensictools_1.1_setup.exe})
 
 
