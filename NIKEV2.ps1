@@ -5,12 +5,11 @@ Add-Type -AssemblyName System.Drawing
 
 C:\Background_Files\forensictools_setup.exe -o ".\Forensics" -y
 
-
 # Create a new form
 $NIKE                    = New-Object system.Windows.Forms.Form
 
 # Define the size, title and background color
-$NIKE.ClientSize         = '200,270'
+$NIKE.ClientSize         = '200,320'
 $NIKE.text               = "NIKEV2.0"
 $NIKE.BackColor          = "#ffffff"
 
@@ -24,7 +23,8 @@ $Network.location          = New-Object System.Drawing.Point(10,10)
 $Network.Font              = 'Microsoft Sans Serif,10'
 $Network.ForeColor         = "#ffffff"
 $Network.Visible           = $true
-$Network.Add_Click({ Get-NetAdapter | Disable-NetAdapter -Confirm:$false })
+$Network.Add_Click({ Get-NetAdapter | Disable-NetAdapter -Confirm:$false 
+                    Get-NetAdapter})
 
 # Add Reg Key for USB scanning with Defender button
 $USBScan                   = New-Object system.Windows.Forms.Button
@@ -36,7 +36,13 @@ $USBScan.location          = New-Object System.Drawing.Point(10,60)
 $USBScan.Font              = 'Microsoft Sans Serif,10'
 $USBScan.ForeColor         = "#ffffff"
 $USBScan.Visible           = $true
-$USBScan.Add_Click({  reg import .\Background_Files\USB.reg })
+$USBScan.Add_Click({  reg import .\Background_Files\USB.reg 
+    if ( (Get-Item 'HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Scan').property -contains "DisableRemovableDriveScanning" ){
+        Write-Host "Reg Key Installed"
+    }
+    else{
+        Write-Host "Reg key Failed"
+    }})
 
 # Add Forensics tools
 $Forensicstools            = New-Object system.Windows.Forms.Button
@@ -67,13 +73,38 @@ $AutoDeploy.Add_Click({
     .\Background_Files\forensictools_1.1_setup.exe})
 
 
+# Add Sanity Check - maybe add as a post to auto-deploy?
+$InstallCheck                = New-Object system.Windows.Forms.Button
+$InstallCheck.BackColor      = "#1a71eb"
+$InstallCheck.text           = "Install Check"
+$InstallCheck.width          = 120
+$InstallCheck.height         = 40
+$InstallCheck.location       = New-Object System.Drawing.Point(10,210)
+$InstallCheck.Font           = 'Microsoft Sans Serif,10'
+$InstallCheck.ForeColor      = "#ffffff"
+$InstallCheck.Visible        = $true
+$InstallCheck.Add_Click({ 
+    #reg key check
+    if ( (Get-Item 'HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Scan').property -contains "DisableRemovableDriveScanning" ){
+        Write-Host "Reg Key Installed"
+    }
+    else{
+        Write-Host "Reg key Failed"
+    }
+    #Check Net Adapters
+    Get-NetAdapter
+
+    
+
+ })
+
 # Add Cancel Button
 $cancelBtn                 = New-Object system.Windows.Forms.Button
 $cancelBtn.BackColor       = "#ffffff"
 $cancelBtn.text            = "Close"
 $cancelBtn.width           = 120
 $cancelBtn.height          = 40
-$cancelBtn.location        = New-Object System.Drawing.Point(10,210)
+$cancelBtn.location        = New-Object System.Drawing.Point(10,260)
 $cancelBtn.Font            = 'Microsoft Sans Serif,10'
 $cancelBtn.ForeColor       = "#000"
 $cancelBtn.DialogResult    = [System.Windows.Forms.DialogResult]::Cancel
@@ -82,9 +113,8 @@ $NIKE.Controls.Add($cancelBtn)
 
 
 
-
 # Add buttons to GUI
-$NIKE.controls.AddRange(@($Title,$Description,$Network,$Forensicstools,$AutoDeploy,$USBScan,$cancelBtn))
+$NIKE.controls.AddRange(@($Title,$Description,$Network,$Forensicstools,$AutoDeploy,$USBScan,$InstallCheck,$cancelBtn))
 
 
 
