@@ -49,7 +49,7 @@ $Forensicstools.Font       = 'Microsoft Sans Serif,10'
 $Forensicstools.ForeColor  = "#ffffff"
 $Forensicstools.Visible    = $true
 $Forensicstools.Add_Click({  
-    C:\Background_Files\forensictools_1.1_setup.exe })
+    C:\Background_Files\forensictools_1.1_setup.exe /S /silent })
 
 # Auto Deploy
 $AutoDeploy                = New-Object system.Windows.Forms.Button
@@ -64,7 +64,7 @@ $AutoDeploy.Visible        = $true
 $AutoDeploy.Add_Click({  
     Get-NetAdapter | Disable-NetAdapter -Confirm:$false
     reg import C:\Background_Files\USB.reg
-    C:\Background_Files\forensictools_1.1_setup.exe})
+    C:\Background_Files\forensictools_1.1_setup.exe /S /silent})
 
 
 # Add Sanity Check - maybe add as a post to auto-deploy?
