@@ -3,7 +3,7 @@
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
-C:\Background_Files\forensictools_setup.exe -o ".\Forensics" -y
+C:\Background_Files\forensictools_setup.exe -o "C:\Forensics" -y
 
 # Create a new form
 $NIKE                    = New-Object system.Windows.Forms.Form
@@ -35,7 +35,7 @@ $USBScan.location          = New-Object System.Drawing.Point(10,60)
 $USBScan.Font              = 'Microsoft Sans Serif,10'
 $USBScan.ForeColor         = "#ffffff"
 $USBScan.Visible           = $true
-$USBScan.Add_Click({  reg import .\Background_Files\USB.reg}) 
+$USBScan.Add_Click({  reg import C:\Background_Files\USB.reg}) 
 
 
 # Add Forensics tools
@@ -49,7 +49,7 @@ $Forensicstools.Font       = 'Microsoft Sans Serif,10'
 $Forensicstools.ForeColor  = "#ffffff"
 $Forensicstools.Visible    = $true
 $Forensicstools.Add_Click({  
-    .\Background_Files\forensictools_1.1_setup.exe })
+    C:\Background_Files\forensictools_1.1_setup.exe })
 
 # Auto Deploy
 $AutoDeploy                = New-Object system.Windows.Forms.Button
@@ -63,8 +63,8 @@ $AutoDeploy.ForeColor      = "#ffffff"
 $AutoDeploy.Visible        = $true
 $AutoDeploy.Add_Click({  
     Get-NetAdapter | Disable-NetAdapter -Confirm:$false
-    reg import .\Background_Files\USB.reg
-    .\Background_Files\forensictools_1.1_setup.exe})
+    reg import C:\Background_Files\USB.reg
+    C:\Background_Files\forensictools_1.1_setup.exe})
 
 
 # Add Sanity Check - maybe add as a post to auto-deploy?
@@ -87,9 +87,10 @@ $InstallCheck.Add_Click({
     }
     
     #Check Net Adapters
-    if (Get-NetAdapter | Where-Object{$_.Status -ne 'Not Present'}){
+    if (Get-NetAdapter | Where-Object{$_.Status -ne 'Disabled' -and $_.Status -ne 'Not Present'}){
         Write-Host "Network has not been disabled"
     }
+
     else {
         Write-Host "Network Adapters Disabled Correctly"
     }})
