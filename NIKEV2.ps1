@@ -23,8 +23,7 @@ $Network.location          = New-Object System.Drawing.Point(10,10)
 $Network.Font              = 'Microsoft Sans Serif,10'
 $Network.ForeColor         = "#ffffff"
 $Network.Visible           = $true
-$Network.Add_Click({ Get-NetAdapter | Disable-NetAdapter -Confirm:$false 
-                    Get-NetAdapter})
+$Network.Add_Click({ Get-NetAdapter | Disable-NetAdapter -Confirm:$false })
 
 # Add Reg Key for USB scanning with Defender button
 $USBScan                   = New-Object system.Windows.Forms.Button
@@ -36,13 +35,8 @@ $USBScan.location          = New-Object System.Drawing.Point(10,60)
 $USBScan.Font              = 'Microsoft Sans Serif,10'
 $USBScan.ForeColor         = "#ffffff"
 $USBScan.Visible           = $true
-$USBScan.Add_Click({  reg import .\Background_Files\USB.reg 
-    if ( (Get-Item 'HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Scan').property -contains "DisableRemovableDriveScanning" ){
-        Write-Host "Reg Key Installed"
-    }
-    else{
-        Write-Host "Reg key Failed"
-    }})
+$USBScan.Add_Click({  reg import .\Background_Files\USB.reg}) 
+
 
 # Add Forensics tools
 $Forensicstools            = New-Object system.Windows.Forms.Button
@@ -91,12 +85,14 @@ $InstallCheck.Add_Click({
     else{
         Write-Host "Reg key Failed"
     }
-    #Check Net Adapters
-    Get-NetAdapter
-
     
-
- })
+    #Check Net Adapters
+    if (Get-NetAdapter | Where-Object{$_.Status -ne 'Not Present'}){
+        Write-Host "Network has not been disabled"
+    }
+    else {
+        Write-Host "Network Adapters Disabled Correctly"
+    }})
 
 # Add Cancel Button
 $cancelBtn                 = New-Object system.Windows.Forms.Button
