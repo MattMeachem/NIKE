@@ -68,22 +68,22 @@ $AutoDeploy.Add_Click({
 
 
 # Add Sanity Check - maybe add as a post to auto-deploy?
-$InstallCheck                = New-Object system.Windows.Forms.Button
-$InstallCheck.BackColor      = "#1a71eb"
-$InstallCheck.text           = "Install Check"
-$InstallCheck.width          = 120
-$InstallCheck.height         = 40
-$InstallCheck.location       = New-Object System.Drawing.Point(10,210)
-$InstallCheck.Font           = 'Microsoft Sans Serif,10'
-$InstallCheck.ForeColor      = "#ffffff"
-$InstallCheck.Visible        = $true
-$InstallCheck.Add_Click({ 
+$PostInstallCheck                = New-Object system.Windows.Forms.Button
+$PostInstallCheck.BackColor      = "#1a71eb"
+$PostInstallCheck.text           = "Install Check"
+$PostInstallCheck.width          = 120
+$PostInstallCheck.height         = 40
+$PostInstallCheck.location       = New-Object System.Drawing.Point(10,210)
+$PostInstallCheck.Font           = 'Microsoft Sans Serif,10'
+$PostInstallCheck.ForeColor      = "#ffffff"
+$PostInstallCheck.Visible        = $true
+$PostInstallCheck.Add_Click({ 
     #reg key check
     if ( (Get-Item 'HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Scan').property -contains "DisableRemovableDriveScanning" ){
         Write-Host "Reg Key Installed"
     }
     else{
-        Write-Host "Reg key Failed"
+        Write-Host "Reg key Failed to install correctly"
     }
     
     #Check Net Adapters
@@ -93,7 +93,13 @@ $InstallCheck.Add_Click({
 
     else {
         Write-Host "Network Adapters Disabled Correctly"
-    }})
+    }
+    #Re-enable script blocking
+    Set-ExecutionPolicy Undefined
+
+    #setup Daily full scan at 2300
+    Set-MpPreference -ScanParameters FullScan -ScanScheduleDay Everyday -ScanScheduleTime 23:00:00
+    })
 
 # Add Cancel Button
 $cancelBtn                 = New-Object system.Windows.Forms.Button
@@ -111,7 +117,7 @@ $NIKE.Controls.Add($cancelBtn)
 
 
 # Add buttons to GUI
-$NIKE.controls.AddRange(@($Title,$Description,$Network,$Forensicstools,$AutoDeploy,$USBScan,$InstallCheck,$cancelBtn))
+$NIKE.controls.AddRange(@($Title,$Description,$Network,$Forensicstools,$AutoDeploy,$USBScan,$PostInstallCheck,$cancelBtn))
 
 
 
