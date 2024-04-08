@@ -99,6 +99,19 @@ $PostInstallCheck.Add_Click({
 
     #setup Daily full scan at 2300
     Set-MpPreference -ScanParameters FullScan -ScanScheduleDay Everyday -ScanScheduleTime 23:00:00
+
+    #Setup Weekly Offline scan, sundays at 2300
+   
+    #Variables
+    $username = Read-Host "Admin username"
+    $password = Read-Host "Admin Password"
+ 
+    #create a scheduled task with powershell
+    $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument ""
+    $Trigger = New-ScheduledTaskTrigger -Weekly -At 11pm -DaysOfWeek Sunday
+    $ScheduledTask = New-ScheduledTask -Action $action -Trigger $trigger 
+ 
+    Register-ScheduledTask -TaskName "Weekly Defender Offline Scan" -InputObject $ScheduledTask -User $username -Password $password
     })
 
 # Add Cancel Button
