@@ -107,11 +107,20 @@ $PostInstallCheck.Add_Click({
     $password = Read-Host "Admin Password"
  
     #create a scheduled task with powershell
-    $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument ""
+    $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "Start-MpWDOScan"
     $Trigger = New-ScheduledTaskTrigger -Weekly -At 11pm -DaysOfWeek Sunday
     $ScheduledTask = New-ScheduledTask -Action $action -Trigger $trigger 
  
     Register-ScheduledTask -TaskName "Weekly Defender Offline Scan" -InputObject $ScheduledTask -User $username -Password $password
+    #check scheduled task exists
+    $Taskname = "Weekly Defender Offline Scan"
+    $taskExists = Get-ScheduledTask | Where-Object {$_.Taskname -like $Taskname}
+    if ($taskExists) {
+    Write-Host "Weekly offline scan scheduled"
+    } else {
+    Write-Host "Failed to schedule Offline Scan"
+    }
+    Write-Host "It is now safe to close the script"
     })
 
 # Add Cancel Button
