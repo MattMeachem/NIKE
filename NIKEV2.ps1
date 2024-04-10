@@ -10,7 +10,7 @@ $NIKE                    = New-Object system.Windows.Forms.Form
 
 # Define the size, title and background color
 $NIKE.ClientSize         = '200,320'
-$NIKE.text               = "NIKEV2.0"
+$NIKE.text               = "NIKEV2.3"
 $NIKE.BackColor          = "#ffffff"
 
 # Disable network adapters
