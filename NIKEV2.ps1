@@ -64,7 +64,9 @@ $AutoDeploy.Visible        = $true
 $AutoDeploy.Add_Click({  
     Get-NetAdapter | Disable-NetAdapter -Confirm:$false
     reg import C:\Background_Files\USB.reg
-    C:\Background_Files\forensictools_1.1_setup.exe /S /silent})
+    C:\Background_Files\forensictools_1.1_setup.exe /S /silent
+    Start-Sleep -Seconds 60
+    Write-Host "Auto-Deploy complete"})
 
 
 # Add Sanity Check - maybe add as a post to auto-deploy?
