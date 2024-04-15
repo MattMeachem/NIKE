@@ -2,7 +2,7 @@
 the "Just do it" Script
 
 the idea is to have an all in one script to deploy a working "Sheepdip" system with the ability to stand up some analyst toolsets in situ.
-List of tools: https://cristian.sh/projects/forensictools.html
+List of tools in the included Help.html file
 
 Currently Contains the following options:
 
