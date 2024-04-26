@@ -1,4 +1,4 @@
-Appversion = 2.3
+$Appversion = 2.3
 #Requires -RunAsAdministrator
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
