@@ -4,7 +4,15 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
 #re-compile 7zip archive
-C:\Background_Files\forensictools_setup.exe -o "C:\Forensics" -y
+$archivePath = "C:\Background_Files\forensictools_1.1_setup.exe"
+
+# Check if the archive already exists
+if (-not (Test-Path -Path $archivePath)) {
+    # If the archive doesn't exist, re-compile it
+    C:\Background_Files\forensictools_setup.exe -o "C:\Forensics" -y
+} else {
+    Write-Host "Re-compiled archive already exists. Skipping re-compilation."
+}
 
 # Function to show username and password input window
 function Show-CredentialsForm {
@@ -117,4 +125,5 @@ if ($username -ne $null -and $password -ne $null) {
     Show-Confirmation -Message "Username and password not provided. Exiting script."
     
 }
-Set-ExecutionPolicy Undefined
+Set-ExecutionPolicy Undefined -force
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell" -Name "ExecutionPolicy" -Value "Undefined" -Force
