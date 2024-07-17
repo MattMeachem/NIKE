@@ -10,7 +10,6 @@ $archivePath = "C:\Background_Files\forensictools_1.1_setup.exe"
 if (-not (Test-Path -Path $archivePath)) {
     # If the archive doesn't exist, re-compile it
     C:\Background_Files\forensictools_setup.exe -o "C:\Forensics" -y
-    Start-Sleep -Seconds 30
 } else {
     Write-Host "Re-compiled archive already exists. Skipping re-compilation."
 }
