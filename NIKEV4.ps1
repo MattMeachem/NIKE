@@ -10,7 +10,7 @@ function Log {
     Write-Host $message
 }
 
-Log "`n===== Forensic Sheepdip Setup Started ====="
+Log "`n===== Project Nike V4 Setup Started ====="
 
 try {
     # === HARDCORE DEBLOAT SECTION ===
@@ -56,7 +56,7 @@ try {
 
     # === FORENSIC TOOL DEPLOYMENT SECTION ===
 
-    $archivePath = "C:\Background_Files\forensictools_1.1_setup.exe"
+    $archivePath = "C:\Background_Files\forensictools_1.1_setup.exe" # need to name the archive and extracted setup differently
     if (-not (Test-Path -Path $archivePath)) {
         Log "[*] Archive missing, extracting forensictools setup..."
         C:\Background_Files\forensictools_setup.exe -o "C:\Forensics" -y
@@ -67,7 +67,7 @@ try {
     Log "[*] Disabling all network adapters..."
     Get-NetAdapter | Disable-NetAdapter -Confirm:$false -ErrorAction SilentlyContinue
 
-    Log "[*] Importing registry keys..."
+    Log "[*] Importing registry keys..."    #scrap this and just directly write the reg key?
     reg import C:\Background_Files\USB.reg | Out-Null
 
     Log "[*] Launching forensic tool setup..."
@@ -100,9 +100,11 @@ try {
     Register-ScheduledTask -TaskName "Weekly Defender Offline Scan" -InputObject $Task -RunLevel Highest -User "SYSTEM" -ErrorAction Stop
     Log "[+] Scheduled Defender offline scan"
 
+   # re-add daily defender scan except on sundays to prevent clash with offline scan
+    
     # Optional cleanup
     Set-ExecutionPolicy Undefined -Force
-    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell" -Name "ExecutionPolicy" -Value "Undefined" -Force
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell" -Name "ExecutionPolicy" -Value "Undefined" -Force # do i need both? better safe than sorry maybe
 
     Log "[✓] Setup complete. System is ready for forensic use."
 
