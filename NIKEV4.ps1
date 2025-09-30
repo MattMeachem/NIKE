@@ -16,7 +16,7 @@ function Log {
     Write-Host $message
 }
 
-Log "n===== Project Nike V4 Setup Started ====="
+Log "`n===== Project Nike V4 Setup Started ====="
 
 try {
     # === HARDCORE DEBLOAT SECTION ===
@@ -41,7 +41,12 @@ try {
             Disable-ScheduledTask -TaskName $_.TaskName -TaskPath $_.TaskPath -ErrorAction SilentlyContinue
         }
 
-        $featuresToRemove = @("Printing-XPSServices-Features", "WorkFolders-Client", "Internet-Explorer-Optional-amd64", "MediaPlayback")
+        $featuresToRemove = @(
+            "Printing-XPSServices-Features",
+            "WorkFolders-Client",
+            "Internet-Explorer-Optional-amd64",
+            "MediaPlayback"
+        )
         foreach ($feature in $featuresToRemove) {
             Disable-WindowsOptionalFeature -Online -FeatureName $feature -NoRestart -ErrorAction SilentlyContinue
         }
@@ -67,7 +72,7 @@ try {
 
     # === FORENSIC TOOL DEPLOYMENT SECTION ===
 
-    $forensicToolPath = "C:\Background_Files\forensictools_1.1_setup.exe"
+    $forensicToolPath = "C:\Forensics\forensictools_1.1_setup.exe"
     if (-not (Test-Path -Path $forensicToolPath)) {
         Log "[!] Forensic tool not found at path: $forensicToolPath"
     } else {
@@ -99,11 +104,14 @@ try {
         Set-MpPreference -ScanParameters FullScan -ScanScheduleDay Everyday -ScanScheduleTime 23:00:00
 
         Log "[*] Scheduling weekly Defender offline scan (SYSTEM context)..."
-        $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "Start-MpWDOScan"
-        $Trigger = New-ScheduledTaskTrigger -Weekly -At 23:00 -DaysOfWeek Sunday
-        $Task = New-ScheduledTask -Action $Action -Trigger $Trigger -Settings (New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries)
+        $Action   = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "Start-MpWDOScan"
+        $Trigger  = New-ScheduledTaskTrigger -Weekly -At 23:00 -DaysOfWeek Sunday
+        $Settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
+        $Principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -RunLevel Highest
 
-        Register-ScheduledTask -TaskName "Weekly Defender Offline Scan" -InputObject $Task -RunLevel Highest -User "SYSTEM" -ErrorAction Stop
+        $Task = New-ScheduledTask -Action $Action -Trigger $Trigger -Settings $Settings -Principal $Principal
+        Register-ScheduledTask -TaskName "Weekly Defender Offline Scan" -InputObject $Task -Force
+
         Log "[+] Scheduled Defender offline scan"
     }
 
