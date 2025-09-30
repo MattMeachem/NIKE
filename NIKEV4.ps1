@@ -72,7 +72,7 @@ try {
 
     # === FORENSIC TOOL DEPLOYMENT SECTION ===
 
-    $forensicToolPath = "C:\Forensics\forensictools_1.1_setup.exe"
+    $forensicToolPath = "C:\Background_files\forensictools_1.1_setup.exe"
     if (-not (Test-Path -Path $forensicToolPath)) {
         Log "[!] Forensic tool not found at path: $forensicToolPath"
     } else {
