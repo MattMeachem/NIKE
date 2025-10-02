@@ -1,7 +1,6 @@
-$Appversion = 4
+﻿$Appversion = 4
 $LogPath = "C:\Background_Files\setup_log.txt"
-$Author - "MattMeachem"
-
+$Author = "MattMeachem"
 
 # Auto-Elevation
 if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
@@ -72,11 +71,11 @@ try {
         Log "STACK TRACE: $($_.ScriptStackTrace)"
     }
 
-    # === OPENHASHTAB SECTION ===
+    # === FORENSIC TOOL DEPLOYMENT SECTION ===
 
-    $forensicToolPath = "C:\Background_files\OpenHashTab_Machine_x64.msi"
-    if (-not (Test-Path -Path $forensicToolPath)) {
-        Log "[!] OPENHASHTAB not found at path: $forensicToolPath"
+   $OpenHashTabPath = "C:\Background_files\OpenHashTab_Machine_x64.msi"
+    if (-not (Test-Path -Path$OpenHashTabPath)) {
+        Log "[!] Forensic tool not found at path:$OpenHashTabPath"
     } else {
         Log "[*] Disabling all network adapters..."
         Get-NetAdapter | Disable-NetAdapter -Confirm:$false -ErrorAction SilentlyContinue
@@ -85,7 +84,7 @@ try {
         reg import C:\Background_Files\USB.reg | Out-Null
 
         Log "[*] Launching forensic tool setup..."
-        Start-Process -FilePath $forensicToolPath -ArgumentList "/S", "/silent" -NoNewWindow
+        Start-Process -FilePath $OpenHashTabPath -ArgumentList "/S", "/silent" -NoNewWindow
         Start-Sleep -Seconds 60
 
         Log "[*] Verifying registry key installation..."
