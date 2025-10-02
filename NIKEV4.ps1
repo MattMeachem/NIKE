@@ -1,6 +1,6 @@
 ﻿$Appversion = 4
 $LogPath = "C:\Background_Files\setup_log.txt"
-$Author = MattMeachem
+$Author = "MattMeachem"
 
 # Auto-Elevation
 if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
