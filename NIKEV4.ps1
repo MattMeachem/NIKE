@@ -71,11 +71,11 @@ try {
         Log "STACK TRACE: $($_.ScriptStackTrace)"
     }
 
-    # === FORENSIC TOOL DEPLOYMENT SECTION ===
+    # === DEPLOYMENT SECTION ===
 
    $OpenHashTabPath = "C:\Background_files\OpenHashTab_Machine_x64.msi"
-    if (-not (Test-Path -Path$OpenHashTabPath)) {
-        Log "[!] Forensic tool not found at path:$OpenHashTabPath"
+    if (-not (Test-Path -Path $OpenHashTabPath)) {
+        Log "[!] OpenHashTab not found at path:$OpenHashTabPath"
     } else {
         Log "[*] Disabling all network adapters..."
         Get-NetAdapter | Disable-NetAdapter -Confirm:$false -ErrorAction SilentlyContinue
@@ -83,8 +83,8 @@ try {
         Log "[*] Importing registry keys..."
         reg import C:\Background_Files\USB.reg | Out-Null
 
-        Log "[*] Launching forensic tool setup..."
-        Start-Process -FilePath $OpenHashTabPath -ArgumentList "/S", "/silent" -NoNewWindow
+        Log "[*] Launching OpenHashTab setup..."
+        Start-Process -FilePath $OpenHashTabPath 
         Start-Sleep -Seconds 60
 
         Log "[*] Verifying registry key installation..."
@@ -120,7 +120,7 @@ try {
     Set-ExecutionPolicy Undefined -Force
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell" -Name "ExecutionPolicy" -Value "Undefined" -Force
 
-    Log "[✓] Setup complete. System is ready for forensic use."
+    Log "[✓] Setup complete. System is ready for use."
 
 } catch {
     Log "ERROR OCCURRED: $($_.Exception.Message)"
